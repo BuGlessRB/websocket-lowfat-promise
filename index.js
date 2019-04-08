@@ -74,6 +74,8 @@
     define("wspromise", [], g);
   else if (W.exports)
     W.exports.wspromise = g;
+  else if (module.exports)
+    module.exports = g;
   else
     W.wspromise = g;
 }(typeof window == "object" ? window : global);

@@ -1,6 +1,6 @@
 {
   "name": "websocket-lowfat-promise",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "websocket library low-fat-promisified",
   "main": "index.js",
   "browser": "index.js",
