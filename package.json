@@ -1,0 +1,18 @@
+{
+  "name": "websocket-lowfat-promise",
+  "version": "1.0.0",
+  "description": "websocket library low-fat-promisified",
+  "main": "index.js",
+  "browser": "index.js",
+  "dependencies": { },
+  "devDependencies": {},
+  "directories": {},
+  "repository": {
+    "type": "git", "url": "git://github.com/BuGlessRB/websocket-lowfat-promise"
+  },
+  "keywords": [
+    "ws", "websocket", "promise", "promisified", "zerodeps"
+  ],
+  "author": "Stephen R. van den Berg <srb@cuci.nl>",
+  "license": "(ISC OR GPL-3.0)"
+}
