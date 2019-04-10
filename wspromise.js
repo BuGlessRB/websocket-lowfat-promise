@@ -23,23 +23,23 @@
     ws.on("pong", (data) => this.pingres(data));
   }
 
-  g.prototype.error = Error => {
+  g.prototype.error = function(Error) {
     if (this.reject)
       this.reject(Error);
     else
       throw(Error);
   };
 
-  g.prototype.open = () => this.openprom;
+  g.prototype.open = function() { return this.openprom; }
 
-  g.prototype.waitforopen = async () => {
+  g.prototype.waitforopen = async function() {
     if (this.openprom)
       await this.openprom;
     else
       this.error("Socket not open");
   }
 
-  g.prototype.send = async (data, options) => {
+  g.prototype.send = async function(data, options) {
     this.waitforopen();
     return new Promise((res, rej) => {
       this.reject = rej;
@@ -49,7 +49,7 @@
     });
   };
 
-  g.prototype.recv = async () => {
+  g.prototype.recv = async function() {
     this.waitforopen();
     if (this.qin.length)
       return this.qin.shift();
@@ -59,7 +59,7 @@
     });
   };
 
-  g.prototype.ping = async (data) => {
+  g.prototype.ping = async function(data) {
     this.waitforopen();
     return new Promise((res, rej) => {
       this.reject = rej;
@@ -70,7 +70,8 @@
     });
   };
 
-  g.prototype.close = (code, reason) => {
+  g.prototype.close = function(code, reason) {
+    this.openprom = 0;
     return new Promise((res, rej) => {
       this.reject = rej;
       try {
