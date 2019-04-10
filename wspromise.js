@@ -50,7 +50,7 @@
       return this.qin.shift();
     return new Promise((res, rej) => {
       this.reject = rej;
-      this.recvres = () => { this.reject = 0; res(); };
+      this.recvres = (data) => { this.reject = 0; res(data); };
     });
   };
 
