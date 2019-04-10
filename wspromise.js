@@ -33,14 +33,12 @@
   g.prototype.open = function() { return this.openprom; }
 
   g.prototype.waitforopen = async function() {
-    if (this.openprom)
-      await this.openprom;
-    else
+    if (!this.openprom)
       this.error("Socket not open");
   }
 
   g.prototype.send = async function(data, options) {
-    this.waitforopen();
+    await this.openprom;
     return new Promise((res, rej) => {
       this.reject = rej;
       try {
@@ -50,17 +48,19 @@
   };
 
   g.prototype.recv = async function() {
-    this.waitforopen();
+    await this.openprom;
     if (this.qin.length)
       return this.qin.shift();
     return new Promise((res, rej) => {
       this.reject = rej;
+      if (!this.openprom)
+        rej("Socket not open");
       this.recvres = (data) => { this.reject = 0; res(data); };
     });
   };
 
   g.prototype.ping = async function(data) {
-    this.waitforopen();
+    await this.openprom;
     return new Promise((res, rej) => {
       this.reject = rej;
       this.pingres = (data) => { this.reject = 0; res(data); };
