@@ -50,7 +50,7 @@
       return this.qin.shift();
     return new Promise((res, rej) => {
       this.reject = rej;
-      this.recvres = () => { this.reject = 0; res(); });
+      this.recvres = () => { this.reject = 0; res(); };
     });
   };
 
@@ -58,7 +58,7 @@
     await this.openprom;
     return new Promise((res, rej) => {
       this.reject = rej;
-      this.pingres = (data) => { this.reject = 0; res(data); });
+      this.pingres = (data) => { this.reject = 0; res(data); };
       try {
         this.ws.ping(data);
       } catch (e) { rej(e); }
