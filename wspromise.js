@@ -15,7 +15,11 @@
       else
         this.qin.push(data);
     });
-    ws.on("close", () => this.openprom = 0);
+    ws.on("close", () => {
+      this.openprom = 0;
+      if (this.recvres)
+        this.error("Socket not open");
+    }
     ws.on("error", this.error);
     ws.on("ping", (data) => {
       try { ws.pong(data); } catch (e) { this.error(e); }
@@ -32,11 +36,6 @@
 
   g.prototype.open = function() { return this.openprom; }
 
-  g.prototype.waitforopen = async function() {
-    if (!this.openprom)
-      this.error("Socket not open");
-  }
-
   g.prototype.send = async function(data, options) {
     await this.openprom;
     return new Promise((res, rej) => {
@@ -48,13 +47,10 @@
   };
 
   g.prototype.recv = async function() {
-    await this.openprom;
     if (this.qin.length)
       return this.qin.shift();
     return new Promise((res, rej) => {
-      this.reject = rej;
-      if (!this.openprom)
-        rej("Socket not open");
+      this.reject = (e) => { this.recvres = 0; rej(e); };
       this.recvres = (data) => { this.reject = 0; res(data); };
     });
   };
