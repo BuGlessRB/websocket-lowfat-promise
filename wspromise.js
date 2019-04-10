@@ -1,6 +1,8 @@
 !function(W)
 { "use strict";
 
+  var errclosed = "Socket not open";
+
   function g(ws) {
     this.ws = ws;
     this.openprom = new Promise((res, rej) => {
@@ -18,7 +20,7 @@
     ws.on("close", () => {
       this.openprom = 0;
       if (this.recvres)
-        this.error("Socket not open");
+        this.error(errclosed);
     });
     ws.on("error", this.error);
     ws.on("ping", (data) => {
@@ -50,8 +52,12 @@
     if (this.qin.length)
       return this.qin.shift();
     return new Promise((res, rej) => {
-      this.reject = (e) => { this.recvres = 0; rej(e); };
-      this.recvres = (data) => { this.reject = 0; res(data); };
+      if (!this.openprom)
+        rej(errclosed);
+      else {
+        this.reject = (e) => { this.recvres = 0; rej(e); };
+        this.recvres = (data) => { this.reject = 0; res(data); };
+      }
     });
   };
 
