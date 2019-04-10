@@ -1,9 +1,9 @@
 {
   "name": "websocket-lowfat-promise",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "websocket library low-fat-promisified",
-  "main": "index.js",
-  "browser": "index.js",
+  "main": "wspromise.js",
+  "browser": "wspromise.js",
   "dependencies": {},
   "devDependencies": {},
   "directories": {},

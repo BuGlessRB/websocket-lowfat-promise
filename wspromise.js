@@ -5,7 +5,7 @@
     this.ws = ws;
     this.openprom = new Promise((res, rej) => {
       this.reject = rej;
-      ws.on("open", () => res());
+      ws.on("open", () => { this.reject = 0; res(); });
     });
     this.qin = [];
     ws.on("message", (data) => {
@@ -23,37 +23,42 @@
   }
 
   g.prototype.error = function(Error) {
-    try { this.reject(Error); } catch (e) { }
+    if (this.reject)
+      this.reject(Error);
+    else
+      throw(Error);
   };
 
   g.prototype.open = function() {
     var prom = this.openprom;
-    this.openprom = 0;
     return prom;
   };
 
-  g.prototype.send = function(data, options) {
+  g.prototype.send = async function(data, options) {
+    await this.openprom;
     return new Promise((res, rej) => {
       this.reject = rej;
       try {
-        this.ws.send(data, options, () => res());
+        this.ws.send(data, options, () => { this.reject = 0; res(); });
       } catch (e) { rej(e); }
     });
   };
 
-  g.prototype.recv = function() {
+  g.prototype.recv = async function() {
+    await this.openprom;
     if (this.qin.length)
       return this.qin.shift();
     return new Promise((res, rej) => {
       this.reject = rej;
-      return this.recvres = res;
+      this.recvres = () => { this.reject = 0; res(); });
     });
   };
 
-  g.prototype.ping = function(data) {
+  g.prototype.ping = async function(data) {
+    await this.openprom;
     return new Promise((res, rej) => {
       this.reject = rej;
-      this.pingres = res;
+      this.pingres = (data) => { this.reject = 0; res(data); });
       try {
         this.ws.ping(data);
       } catch (e) { rej(e); }
