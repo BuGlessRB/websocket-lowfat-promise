@@ -19,7 +19,7 @@
       this.openprom = 0;
       if (this.recvres)
         this.error("Socket not open");
-    }
+    });
     ws.on("error", this.error);
     ws.on("ping", (data) => {
       try { ws.pong(data); } catch (e) { this.error(e); }
