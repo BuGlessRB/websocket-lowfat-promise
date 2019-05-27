@@ -78,10 +78,10 @@
       if (this.reject)
         this.reject(errclosed);
       this.reject = rej;
+      this.ws.on("close", () => { this.reject = 0; res(); });
       try {
         this.ws.close(code, reason);
       } catch (e) { rej(e); }
-      this.ws.on("close", () => res());
     });
   };
 
