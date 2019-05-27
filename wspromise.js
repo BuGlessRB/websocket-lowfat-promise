@@ -75,6 +75,8 @@
   g.prototype.close = function(code, reason) {
     this.openprom = 0;
     return new Promise((res, rej) => {
+      if (this.reject)
+        this.reject(errclosed);
       this.reject = rej;
       try {
         this.ws.close(code, reason);
