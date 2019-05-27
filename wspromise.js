@@ -41,9 +41,8 @@
   g.prototype.send = async function(data, options) {
     await this.openprom;
     return new Promise((res, rej) => {
-      this.reject = rej;
       try {
-        this.ws.send(data, options, () => { this.reject = 0; res(); });
+        this.ws.send(data, options, () => { res(); });
       } catch (e) { rej(e); }
     });
   };
