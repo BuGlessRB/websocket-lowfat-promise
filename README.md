@@ -18,7 +18,7 @@ const WebSocket = require("ws");
 const wspromise = require("websocket-lowfat-promise");
 
 async function runme() {
-  const wsp = new wsppromise(new WebSocket("wsp://foo.com/bar"));
+  const wsp = new wspromise(new WebSocket("wsp://foo.com/bar"));
   await wsp.open();
   await wsp.send("Hello world!  Send me a response please.");
   var response = await wsp.recv();
