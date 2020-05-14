@@ -22,7 +22,7 @@
       if (this.recvres)
         this.error(errclosed);
     });
-    ws.on("error", this.error);
+    ws.on("error", this.error.bind(this));
     ws.on("ping", (data) => {
       try { ws.pong(data); } catch (e) { this.error(e); }
     });
